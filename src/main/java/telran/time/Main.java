@@ -87,7 +87,7 @@ public class Main {
         int month = monthYear.month();
         LocalDate date = LocalDate.of(year, month, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM");
-        printCenteredText(date.format(formatter) + " " + String.valueOf(year), 28);
+        printCenteredText(String.valueOf(year) + " " + date.format(formatter), 30);
     }
 
     private static void printWeekDays(int dayOfWeekStart) {
@@ -100,7 +100,10 @@ public class Main {
     }
 
     private static void printDaysNames(String[] reorderedDays) {
-        System.out.println(String.join(" ", reorderedDays));
+        for (String reorderDay : reorderedDays) {
+            System.out.printf("%4s", reorderDay);
+        }
+        System.out.println();
     }
 
     private static void reorderDays(int dayOfWeekStart, String[] dayNames, String[] reorderedDays) {
@@ -132,6 +135,7 @@ public class Main {
         if ((lastDayOfMonth + offset) % DAYS_IN_WEEK != 0) {
             System.out.println();
         }
+        System.out.println();
     }
 
     private static void printOffset(int offset) {
