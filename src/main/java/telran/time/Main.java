@@ -10,6 +10,9 @@ record MonthYear(int month, int year) {
 }
 
 public class Main {
+    private static final int WIDTH = 43;
+    private static final int COLUMN_WIDTH = 6;
+    private static final int DAYS_IN_WEEK = 7;
 
     /**
      * 
@@ -83,15 +86,16 @@ public class Main {
     }
 
     private static void printTitle(MonthYear monthYear) {
+        System.out.println();
         int year = monthYear.year();
         int month = monthYear.month();
         LocalDate date = LocalDate.of(year, month, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM");
-        printCenteredText(String.valueOf(year) + " " + date.format(formatter), 30);
+        printCenteredText(String.valueOf(year) + " " + date.format(formatter), 43);
     }
 
     private static void printWeekDays(int dayOfWeekStart) {
-        final int DAYS_IN_WEEK = 7;
+
         DateFormatSymbols symbols = new DateFormatSymbols();
         String[] dayNames = symbols.getShortWeekdays();
         String[] reorderedDays = new String[DAYS_IN_WEEK];
@@ -100,14 +104,19 @@ public class Main {
     }
 
     private static void printDaysNames(String[] reorderedDays) {
-        for (String reorderDay : reorderedDays) {
-            System.out.printf("%4s", reorderDay);
+
+        String dashLine = " ".repeat(1) + "-".repeat(WIDTH);
+        System.out.println(dashLine);
+        System.out.print(" ");
+        for (String day : reorderedDays) {
+            System.out.printf("%-" + COLUMN_WIDTH + "s", "| " + day + " ");
         }
-        System.out.println();
+        System.out.println("|");
+        System.out.println(dashLine);
     }
 
     private static void reorderDays(int dayOfWeekStart, String[] dayNames, String[] reorderedDays) {
-        final int DAYS_IN_WEEK = 7;
+
         for (int i = 0; i < DAYS_IN_WEEK; i++) {
             int index = (dayOfWeekStart + i - 1) % DAYS_IN_WEEK + 1;
             reorderedDays[i] = dayNames[index];
@@ -123,23 +132,29 @@ public class Main {
     }
 
     private static void printDatesLayout(int lastDayOfMonth, int offset) {
-        final int DAYS_IN_WEEK = 7;
 
         for (int day = 1; day <= lastDayOfMonth; day++) {
-            System.out.printf("%4d", day);
+            if (String.valueOf(day).length() < 2) {
+                System.out.printf("%6s", "|   " + String.valueOf(day) + "");
+
+            } else {
+                System.out.printf("%6s", "|  " + String.valueOf(day) + "");
+            }
             if ((day + offset) % DAYS_IN_WEEK == 0) {
-                System.out.println();
+                System.out.println(" |");
             }
         }
 
         if ((lastDayOfMonth + offset) % DAYS_IN_WEEK != 0) {
             System.out.println();
         }
+        String dashLine = " ".repeat(1) + "-".repeat(WIDTH);
+        System.out.println(dashLine);
         System.out.println();
     }
 
     private static void printOffset(int offset) {
-        System.out.print(" ".repeat(offset * 4));
+        System.out.print(" ".repeat(offset * 6));
     }
 
     private static int getFirstDayOfWeek(MonthYear monthYear) {
@@ -157,9 +172,13 @@ public class Main {
     }
 
     private static void printCenteredText(String text, int length) {
-        int padLeft = Math.max(length - text.length(), 0) / 2;
-        System.out.printf("\n%" + (padLeft + text.length()) + "s%n",
-                String.format("%" + (text.length() + padLeft) + "s", text));
+        if (text.length() >= length) {
+
+            System.out.println(text);
+        } else {
+            int padLeft = (length - text.length()) / 2;
+            System.out.printf("%" + (length - padLeft) + "s%n", text);
+        }
     }
 
 }
